@@ -9,7 +9,6 @@ let emailGerado: string;
 const senhaPadrao = '123456';
 
 async function bloquearAds(page: any) {
-  // Bloqueia uma lista extensa de domínios de anúncios e rastreio
   const adsAndTrackers = [
     '**/googleads.g.doubleclick.net/**',
     '**/pagead2.googlesyndication.com/**',
@@ -25,7 +24,6 @@ async function bloquearAds(page: any) {
     await page.route(pattern, (route: any) => route.abort());
   }
 
-  // Aborta qualquer requisição que contenha "ads" ou "static" de servidores de terceiros
   await page.route('**/*', (route: any) => {
     const url = route.request().url();
     if (url.includes('googleads') || url.includes('adsbygoogle') || url.includes('vignette')) {
@@ -35,14 +33,11 @@ async function bloquearAds(page: any) {
   });
 }
 
-// ----------------------
-// ACESSO E LIMPEZA
-// ----------------------
+
 
 Dado('que eu acesso a página de login', async ({ page, context }) => {
   await context.clearCookies();
   await bloquearAds(page);
-  // Injeta CSS para esconder qualquer container de anúncio remanescente
   await page.addStyleTag({
     content: `
       #google_esf, .adsbygoogle, #aswift_0_expand, #aswift_0_anchor, 
@@ -61,7 +56,6 @@ Dado('que eu acesso a página de login', async ({ page, context }) => {
   const loginPage = new LoginPage(page);
   await loginPage.irParaLogin();
 
-  // 🔥 REMOÇÃO VISUAL: Esconde elementos de anúncios via CSS injetado
   await page.addStyleTag({
     content: `
       #google_esf, .adsbygoogle, #aswift_0_expand, #aswift_0_anchor, 
@@ -79,44 +73,32 @@ Dado('que eu acesso a página de login', async ({ page, context }) => {
   }
 });
 
-// ----------------------
-// CADASTRO
-// ----------------------
 
-// AJUSTADO PARA O TC-01
 Quando('eu realizo o cadastro completo de um novo usuário', async ({ page }) => {
   const signup = new SignupPage(page);
   emailGerado = `pedro_qa_${Date.now()}@teste.com`;
   await signup.preencherCadastroInicial('Pedro Victor', emailGerado);
   await signup.criarContaCompleta(); 
 
-  // ADICIONADO AQUI: Força o clique no continue após o cadastro do TC-01
   const continueBtn = page.locator('[data-qa="continue-button"]');
   await continueBtn.waitFor({ state: 'visible' });
   await continueBtn.click({ force: true });
 });
 
-// AJUSTADO PARA O TC-05
 Quando('eu cadastro um usuário válido', async ({ page }) => {
   const signup = new SignupPage(page);
   emailGerado = `pedro_qa_${Date.now()}@teste.com`;
   await signup.preencherCadastroInicial('Pedro Victor', emailGerado);
   await signup.criarContaCompleta();
 
-  // ADICIONADO AQUI TAMBÉM:
   const continueBtn = page.locator('[data-qa="continue-button"]');
   await continueBtn.waitFor({ state: 'visible' });
   await continueBtn.click({ force: true });
 });
 
 Entao('a conta deve ser criada com sucesso', async ({ page }) => {
-  // Como já clicamos no continue, validamos que estamos logados ou a URL mudou
   await expect(page.locator('text=Logged in as')).toBeVisible();
 });
-
-// ----------------------
-// LOGIN E LOGOUT
-// ----------------------
 
 Quando('eu cadastro e faço login com um usuário válido', async ({ page }) => {
   const signup = new SignupPage(page);
@@ -125,8 +107,7 @@ Quando('eu cadastro e faço login com um usuário válido', async ({ page }) => 
   emailGerado = `pedro_qa_${Date.now()}@teste.com`;
   await signup.preencherCadastroInicial('Pedro Victor', emailGerado);
   await signup.criarContaCompleta();
-  
-  // CLIQUE NO CONTINUE (JÁ ESTAVA AQUI)
+
   const continueBtn = page.locator('[data-qa="continue-button"]');
   await continueBtn.waitFor({ state: 'visible' });
   await continueBtn.click({ force: true }); // Adicionei o force: true aqui também
@@ -151,9 +132,6 @@ Entao('devo ser redirecionado para a página de login', async ({ page }) => {
   await expect(page).toHaveURL(/.*login/);
 });
 
-// ----------------------
-// EXCLUSÃO E ERROS
-// ----------------------
 
 Quando('eu excluo a conta', async ({ page }) => {
   const login = new LoginPage(page);
@@ -161,21 +139,14 @@ Quando('eu excluo a conta', async ({ page }) => {
 });
 
 Entao('a conta deve ser excluída com sucesso', async ({ page }) => {
-  // 1. Localiza a mensagem e o botão
   const msgDeletada = page.getByText('Account Deleted!', { exact: false });
   const continueBtn = page.locator('[data-qa="continue-button"]');
-
-  // 2. Espera a mensagem de confirmação aparecer
   await expect(msgDeletada).toBeVisible({ timeout: 10000 });
-
-  // 3. O PULO DO GATO: Espera a navegação acontecer ao mesmo tempo que clica
-  // Isso evita que o teste feche antes do site processar o clique
   await Promise.all([
     page.waitForURL('https://automationexercise.com/', { timeout: 10000 }),
     continueBtn.click({ force: true })
   ]);
 
-  // 4. Validação final de segurança
   await expect(page).toHaveURL('https://automationexercise.com/');
 });
 

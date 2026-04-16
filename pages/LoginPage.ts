@@ -15,7 +15,6 @@ export class LoginPage {
     private readonly signupEmail: Locator;
     private readonly signupButton: Locator;
     
-    // 1. ADICIONE A DECLARAÇÃO AQUI
     private readonly errorMessage: Locator;
 
     constructor(page: Page) {
@@ -29,17 +28,12 @@ export class LoginPage {
         this.deleteAccountLink = page.getByRole('link', { name: ' Delete Account' });
         this.accountDeletedText = page.getByText('Account Deleted!');
         this.continueButton = page.getByRole('link', { name: 'Continue' });
-        
-        // 2. ADICIONE O MAPEAMENTO AQUI
         this.signupName = page.getByRole('textbox', { name: 'Name' });
         this.signupEmail = page.locator('form').filter({ hasText: 'Signup' }).getByPlaceholder('Email Address');
         this.signupButton = page.getByRole('button', { name: 'Signup' });
-        
-        // Mapeia qualquer parágrafo ou texto que contenha mensagens de erro comuns no site
         this.errorMessage = page.locator('p[style*="color: red"], .login-form p');
     }
 
-    // --- AÇÕES ---
 
     async irParaLogin() {
         await this.page.goto("https://automationexercise.com/");
@@ -54,24 +48,19 @@ export class LoginPage {
     }
 
     async realizarLogout() {
-    // 🔥 garante que está logado
+   
     await this.loggedInText.waitFor({ state: 'visible', timeout: 10000 });
 
-    // 🔥 espera o botão aparecer de verdade
     await this.logoutLink.waitFor({ state: 'visible', timeout: 10000 });
 
-    // 🔥 garante que está clicável
     await this.logoutLink.scrollIntoViewIfNeeded();
 
-    // 🔥 clique confiável
     await this.logoutLink.click();
 
-    // 🔥 valida que voltou pra tela de login
     await this.page.locator('text=Login to your account').waitFor({ timeout: 10000 });
 }
 
     async deletarConta() {
-    // Clica no link de excluir conta no menu superior
     await this.page.locator('a[href="/delete_account"]').click();
 }
 
@@ -81,23 +70,19 @@ export class LoginPage {
         await this.signupButton.click({ force: true }); // 'force' ajuda com anúncios na frente
     }
 
-    // --- VALIDAÇÕES ---
 
     async validarUsuarioLogado() {
-        // Espera o texto aparecer. O "timeout" ajuda se o site estiver lento.
         await this.loggedInText.waitFor({ state: 'visible', timeout: 7000 });
         await expect(this.loggedInText).toBeVisible();
     }
 
     async validarMensagemErro(mensagem: string) {
-        // Busca o texto da mensagem dinamicamente para garantir que o TC-03 e TC-05 passem
         const erro = this.page.getByText(mensagem);
         await erro.waitFor({ state: 'visible', timeout: 5000 });
         await expect(erro).toBeVisible();
     }
 
     async validarPaginaLoginVisivel() {
-        // Verifica se o título "Login to your account" está na tela
         await expect(this.page.locator('text=Login to your account')).toBeVisible();
     }
 }

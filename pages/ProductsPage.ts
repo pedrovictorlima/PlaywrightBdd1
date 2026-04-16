@@ -21,12 +21,9 @@ export class ProductsPage {
         await expect(this.allProductsHeader).toBeVisible();
     }
 
-    // ✅ CORRIGIDO: validação genérica — não depende do produto "Blue Top" especificamente
     async validarDetalhesProduto() {
-        // Garante que chegou na página de detalhes
         await expect(this.page).toHaveURL(/.*product_details/);
 
-        // Valida campos que existem em QUALQUER produto do site
         await expect(this.page.locator('.product-information h2')).toBeVisible();           // Nome
         await expect(this.page.locator('.product-information p').filter({ hasText: 'Category' })).toBeVisible();
         await expect(this.page.locator('.product-information span span')).toBeVisible();    // Preço

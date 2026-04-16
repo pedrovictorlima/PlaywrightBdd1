@@ -1,14 +1,13 @@
 import { defineConfig, devices } from '@playwright/test';
-import { defineBddConfig } from 'playwright-bdd'; // <-- 1. Importa a ferramenta BDD
+import { defineBddConfig } from 'playwright-bdd';
 
-// 2. Define onde estão suas features e seus steps
 const testDir = defineBddConfig({
-  features: 'features/*.feature', // Verifique se a pasta chama 'features' (no plural)
-  steps: 'steps/*.ts',            // Verifique se a pasta chama 'steps' (no plural)
+  features: 'features/*.feature',
+  steps: 'steps/*.ts',            
 });
 
 export default defineConfig({
-  testDir, // <-- 3. Substituímos o './tests' pela variável configurada acima
+  testDir,
   
   fullyParallel: true,
   forbidOnly: !!process.env.CI,

@@ -3,9 +3,6 @@ import { Page, expect } from "@playwright/test";
 export class SignupPage {
   constructor(private page: Page) {}
 
-  // ----------------------
-  // LOCATORS (estáveis)
-  // ----------------------
 
   private get loginLink() {
     return this.page.getByRole('link', { name: 'Signup / Login' });
@@ -27,14 +24,12 @@ export class SignupPage {
     return this.page.getByText(/Email Address already exist!/i);
   }
 
-  // form
   private get titleMr() { return this.page.locator('#id_gender1'); }
   private get password() { return this.page.locator('#password'); }
   private get days() { return this.page.locator('#days'); }
   private get months() { return this.page.locator('#months'); }
   private get years() { return this.page.locator('#years'); }
 
-  // address
   private get firstName() { return this.page.locator('#first_name'); }
   private get lastName() { return this.page.locator('#last_name'); }
   private get address() { return this.page.locator('#address1'); }
@@ -64,20 +59,15 @@ export class SignupPage {
     return this.page.getByText('Account Deleted!');
   }
 
-  // ----------------------
-  // ACTIONS
-  // ----------------------
 
   async irParaSignup() {
     await this.page.goto("https://automationexercise.com/");
     await this.page.waitForLoadState('domcontentloaded');
     await this.loginLink.click();
 
-    // garante que carregou
     await expect(this.signupName).toBeVisible();
   }
 
-  // 🔥 método robusto (aceita email opcional)
   async preencherCadastroInicial(nome: string, email?: string) {
     const emailFinal = email ?? `teste_${Date.now()}@mail.com`;
 
@@ -113,7 +103,6 @@ export class SignupPage {
   }
 
   async criarContaCompleta() {
-  // 🔥 ESSA LINHA RESOLVE 80% DOS ERROS
   await this.page.locator('#password').waitFor({ state: 'visible' });
 
   await this.preencherDadosConta();
@@ -125,10 +114,8 @@ export class SignupPage {
   async validarContaCriada() {
   await this.accountCreatedMsg.waitFor({ state: 'visible' });
 
-  // 🔥 ESSENCIAL
   await this.continueBtn.click();
 
-  // 🔥 garante que entrou na home logado
   await this.page.locator('text=Logged in as').waitFor();
 }
 
@@ -141,10 +128,8 @@ export class SignupPage {
   async excluirConta() {
   await this.deleteAccountBtn.click();
 
-  // 🔥 valida aqui dentro
   await this.accountDeletedMsg.waitFor({ state: 'visible' });
 
-  // depois continua
   await this.continueBtn.click();
 }
 }
