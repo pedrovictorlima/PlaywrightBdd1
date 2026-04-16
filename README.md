@@ -48,7 +48,6 @@ Gerar os arquivos BDD:
 ```bash
 npx bddgen
 
-
 ```
 Executar os testes:
 
@@ -56,7 +55,11 @@ Executar os testes:
 npx playwright test
 ```
 🧠 Boas práticas aplicadas
+
 Uso de BDD com Gherkin
+
 Aplicação de Page Object Model (POM)
+
 Separação de responsabilidades
+
 Código reutilizável e escalável
