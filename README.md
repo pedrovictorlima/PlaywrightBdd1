@@ -11,12 +11,14 @@ VS Code (Opcional, mas recomendado)
 📥 Instalação
 Clone o repositório:
 
-git clone https://github.com/SEU_USUARIO/NOME_DO_REPO.git
-cd NOME_DO_REPO
+git clone [https://github.com/SEU_USUARIO/NOME_DO_REPO.git](https://github.com/pedrovictorlima/PlaywrightBdd1.git)
+cd PlaywrightBdd1
 Instale as dependências do projeto:
 
 npm install
 Instale os navegadores do Playwright:
+
+npm install @cucumber/cucumber --save-dev
 
 npx playwright install
 🏃 Como Rodar os Testes
