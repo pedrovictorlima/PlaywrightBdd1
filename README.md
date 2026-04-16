@@ -11,16 +11,13 @@ VS Code (Opcional, mas recomendado)
 📥 Instalação
 Clone o repositório:
 
-Bash
 git clone https://github.com/SEU_USUARIO/NOME_DO_REPO.git
 cd NOME_DO_REPO
 Instale as dependências do projeto:
 
-Bash
 npm install
 Instale os navegadores do Playwright:
 
-Bash
 npx playwright install
 🏃 Como Rodar os Testes
 Como este projeto utiliza BDD, a execução ocorre em duas etapas (automatizadas ou manuais):
@@ -28,17 +25,14 @@ Como este projeto utiliza BDD, a execução ocorre em duas etapas (automatizadas
 1. Gerar os arquivos de teste (BDD)
 O Playwright não lê arquivos .feature nativamente. Precisamos "traduzi-los" para a pasta .features-gen:
 
-Bash
 npx bddgen
 2. Executar os testes
 Após gerar os arquivos, rode o comando padrão:
 
-Bash
 npx playwright test
 📊 Ver o Relatório de Testes
 Após a execução, um relatório detalhado será gerado. Para visualizá-lo, use:
 
-Bash
 npx playwright show-report
 📁 Estrutura do Projeto
 features/: Arquivos .feature escritos em Gherkin (especificações de negócio).
