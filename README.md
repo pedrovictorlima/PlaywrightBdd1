@@ -16,11 +16,13 @@ cd PlaywrightBdd1
 Instale as dependências do projeto:
 
 npm install
+
 Instale os navegadores do Playwright:
 
 npm install @cucumber/cucumber --save-dev
 
 npx playwright install
+
 🏃 Como Rodar os Testes
 Como este projeto utiliza BDD, a execução ocorre em duas etapas (automatizadas ou manuais):
 
@@ -28,14 +30,17 @@ Como este projeto utiliza BDD, a execução ocorre em duas etapas (automatizadas
 O Playwright não lê arquivos .feature nativamente. Precisamos "traduzi-los" para a pasta .features-gen:
 
 npx bddgen
+
 2. Executar os testes
 Após gerar os arquivos, rode o comando padrão:
 
 npx playwright test
+
 📊 Ver o Relatório de Testes
 Após a execução, um relatório detalhado será gerado. Para visualizá-lo, use:
 
 npx playwright show-report
+
 📁 Estrutura do Projeto
 features/: Arquivos .feature escritos em Gherkin (especificações de negócio).
 
